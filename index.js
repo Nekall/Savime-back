@@ -7,6 +7,7 @@ dotenv.config();
 
 // Routes
 import employeeRoutes from './routes/employee.route.js';
+import managerRoutes from './routes/manager.route.js';
 
 const app = express();
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
@@ -28,12 +29,9 @@ app.use((req, res, next) => {
 });
 
 //############### Routes #############
-app.get('/', (req, res) => {
-  res.send('<h1>Hello_World!</h1>')
-});
-
+app.get('/', (req, res) => res.send('<h1>Welcome on Savime ! 🚀</h1>'));
 app.use('/employees', employeeRoutes);
-//app.use('/managers', managerRoutes);
+app.use('/managers', managerRoutes);
 //####################################
 
 const PORT = process.env.PORT || 3001;

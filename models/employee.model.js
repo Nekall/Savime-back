@@ -1,5 +1,4 @@
 import { Sequelize, DataTypes } from "sequelize";
-//const {  } = Sequelize;
 import db from "../server.js";
 
 const Employees = db.define("employees", {
@@ -31,6 +30,7 @@ const Employees = db.define("employees", {
   password: { type: DataTypes.STRING, allowNull: false },
 });
 
-await Employees.sync({ alter: true });
+console.log('🔨 Creating the employee table');
+await Employees.sync({ alter: true }).then(()=>console.log("✅ Employee table successfully created."));
 
 export default Employees;
