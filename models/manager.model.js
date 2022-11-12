@@ -28,9 +28,22 @@ const Managers = db.define("managers", {
     },
   },
   password: { type: DataTypes.STRING, allowNull: false },
+  resetToken: { type: DataTypes.STRING, allowNull: true },
+  admin: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  profilePicture: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "",
+  },
 });
 
-console.log("🔨 Creating the manager table")
-await Managers.sync({ alter: true }).then(()=>console.log("✅ Manager table successfully created."));
+console.log("🔨 Creating the manager table");
+await Managers.sync({ alter: true }).then(() =>
+  console.log("✅ Manager table successfully created.")
+);
 
 export default Managers;

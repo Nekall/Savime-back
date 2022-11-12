@@ -28,9 +28,23 @@ const Employees = db.define("employees", {
     },
   },
   password: { type: DataTypes.STRING, allowNull: false },
+  verified: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  resetToken: { type: DataTypes.STRING, allowNull: true },
+  job: { type: DataTypes.STRING, allowNull: true },
+  profilePicture: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "",
+  },
 });
 
-console.log('🔨 Creating the employee table');
-await Employees.sync({ alter: true }).then(()=>console.log("✅ Employee table successfully created."));
+console.log("🔨 Creating the employee table");
+await Employees.sync({ alter: true }).then(() =>
+  console.log("✅ Employee table successfully created.")
+);
 
 export default Employees;
