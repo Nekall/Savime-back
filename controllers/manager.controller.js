@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import Managers from "../models/manager.model.js";
 
 export const create = async (req, res) => {
@@ -104,7 +105,6 @@ export const remove = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  console.log("JWT SECRET :", jwtSecret);
   Managers.findOne({ where: { email: req.body.email } })
     .then((manager) => {
       if (!manager)

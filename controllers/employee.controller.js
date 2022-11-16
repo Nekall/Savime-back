@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import Employees from "../models/employee.model.js";
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -105,7 +106,6 @@ export const remove = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  console.log("JWT SECRET :", jwtSecret);
   Employees.findOne({ where: { email: req.body.email } })
     .then((employee) => {
       if (!employee)
