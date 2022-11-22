@@ -1,7 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Employees from "../models/employee.model.js";
-const jwtSecret = process.env.JWT_SECRET;
+const { FRONT_LINK, JWT_SECRET } = process.env;
+
+// Helpers
+import { sendMail } from "../helpers/sendMail.js";
 
 export const create = async (req, res) => {
   const { firstname, lastname, email, password, confirmPassword } = req.body;
@@ -121,7 +124,7 @@ export const login = async (req, res) => {
               .status(401)
               .json({ success: false, message: `Wrong password.` });
 
-          const token = jwt.sign({ employeeId: employee.id }, jwtSecret, {
+          const token = jwt.sign({ employeeId: employee.id }, JWT_SECRET, {
             expiresIn: "24h",
           });
 
@@ -145,3 +148,45 @@ export const login = async (req, res) => {
         })
     );
 };
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  const employee = await Employees.findOne({ where: { email: email } });
+  if(employee){
+    const token = jwt.sign({ id: employee.id ,email: employee.email }, JWT_SECRET, {
+      expiresIn: "10m",
+    });
+    const response = await sendMail(
+      email, 
+      "Savime | Demande reinitialisation du mot de passe", 
+      `Cliquez sur ce lien pour reinitialiser votre mot de passe : ${FRONT_LINK}/reinitialisation-mot-de-passe/${token}`,
+      );
+      return res.status(200).json({ data: response, message: "Mail sent" });
+  } else {
+    return res.status(404).json({ message: "Account does not exist" });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { password, confirmPassword } = req.body;
+  const { token } = req.params;
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: "Passwords are not the same." });
+  }
+
+  jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+    if (err) {
+      return res.status(400).json({ message: "Invalid or expired link" });
+    }
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(password, salt);
+    const employee = await Employees.findOne({ where: { email: decodedToken.email } });
+    if(employee){
+      await Employees.update({ password: hashPassword }, { where: { id: employee.id } });
+      return res.status(200).json({ message: "Password updated" });
+    } else {
+      return res.status(404).json({ message: "Account does not exist" });
+    }
+  });
+}
