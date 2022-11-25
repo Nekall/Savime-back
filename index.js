@@ -9,6 +9,7 @@ const { FRONT_LINK } = process.env;
 // Routes
 import employeeRoutes from './routes/employee.route.js';
 import managerRoutes from './routes/manager.route.js';
+import globalRoutes from './routes/global.route.js';
 
 const app = express();
 app.use(cors({ credentials: true, origin: FRONT_LINK }));
@@ -30,7 +31,8 @@ app.use((req, res, next) => {
 });
 
 //############### Routes #############
-app.get('/', (req, res) => res.send('<h1>Welcome on Savime ! 🚀</h1>'));
+//app.get('/', (req, res) => res.send('<h1>Welcome on Savime ! 🚀</h1>'));
+app.use('/', globalRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/managers', managerRoutes);
 //####################################
