@@ -113,7 +113,7 @@ export const login = async (req, res) => {
       if (!employee)
         return res
           .status(404)
-          .json({ success: false, message: "Cet employé n'existe pas." });
+          .json({ success: false, message: "Ce compte n'a pas été trouvé." });
 
       bcrypt
         .compare(req.body.password, employee.password)

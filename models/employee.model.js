@@ -2,6 +2,12 @@ import { Sequelize, DataTypes } from "sequelize";
 import db from "../server.js";
 
 const Employees = db.define("employees", {
+  employee_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
   firstname: {
     type: DataTypes.STRING,
     allowNull: false,
