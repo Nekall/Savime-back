@@ -41,9 +41,7 @@ const Managers = db.define("managers", {
     defaultValue: false,
   },
   profilePicture: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: "",
+    type: DataTypes.TEXT,
   },
 });
 

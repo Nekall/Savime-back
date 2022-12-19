@@ -10,6 +10,7 @@ const { FRONT_LINK } = process.env;
 import employeeRoutes from "./routes/employee.route.js";
 import managerRoutes from "./routes/manager.route.js";
 import globalRoutes from "./routes/global.route.js";
+import adminRoutes from "./routes/admin.route.js";
 import documentRoutes from "./routes/document.route.js";
 
 // Associations
@@ -43,6 +44,7 @@ app.use("/", globalRoutes);
 app.use("/employees", employeeRoutes);
 app.use("/managers", managerRoutes);
 app.use("/documents", documentRoutes);
+app.use("/admin", adminRoutes);
 
 Employees.hasMany(Documents, {
   foreignKey: "employee_id",

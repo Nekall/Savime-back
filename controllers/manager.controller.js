@@ -120,7 +120,12 @@ export const login = async (req, res) => {
               .status(401)
               .json({ succes: false, message: "Mot de passe incorrect." });
 
-          const token = jwt.sign({ managerId: manager.id }, jwtSecret, {
+              const payload = {
+                managerId: manager.manager_id,
+                role: "Manager",
+              };
+
+              const token = jwt.sign(payload, JWT_SECRET, {
             expiresIn: "24h",
           });
 

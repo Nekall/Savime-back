@@ -18,10 +18,8 @@ router.get('/', findAll);
 router.put('/:id', update);
 router.delete('/:id', remove);
 
-router.post('/forgot-password', forgotPassword);
-
-router.post('/reset-password/:token', resetPassword);
-
 router.post('/login', login);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password/:token', resetPassword);
 
 export default router;

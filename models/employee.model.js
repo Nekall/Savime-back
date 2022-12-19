@@ -42,9 +42,7 @@ const Employees = db.define("employees", {
   resetToken: { type: DataTypes.STRING, allowNull: true },
   job: { type: DataTypes.STRING, allowNull: true },
   profilePicture: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: "",
+    type: DataTypes.TEXT,
   },
 });
 

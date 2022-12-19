@@ -1,3 +1,6 @@
+import jwt from "jsonwebtoken";
+const { JWT_SECRET } = process.env;
+
 // Helpers
 import { sendMail } from "../helpers/sendMail.js";
 
@@ -55,3 +58,20 @@ export const newsletters = async (req, res) => {
       });
     });
 };
+
+export const jwtTokenVerification = async (req, res) => {
+  const { token } = req.body;
+  jwt.verify(token, JWT_SECRET, function(err, decoded) {
+    if(err){
+      return res.status(500).send({
+        success: false,
+        message: "Token invalide.",
+      });
+    } else {
+      return res.status(200).send({
+        success: true,
+        message: "Token valide.",
+      });
+    }
+  });
+}
