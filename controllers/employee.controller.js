@@ -26,12 +26,12 @@ export const create = async (req, res) => {
       });
       return res.status(201).send({
         success: true,
-        message: "Le compte de l'employé a été créé avec succès.",
+        message: "Le compte de l'employé·e a été créé avec succès.",
       });
     } catch (error) {
       return res.status(400).send({
         success: false,
-        message: "Le compte de l'employé n'a pas pu être créé.",
+        message: "Le compte de l'employé·e n'a pas pu être créé.",
       });
     }
   } else {
@@ -42,19 +42,20 @@ export const create = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  const updatedData = {
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    email: req.body.email,
-  };
-
   const employee = await Employees.findOne({
     where: { id: req.params.id },
   });
   if (employee === null)
     return res
       .status(404)
-      .send({ success: true, message: "Employé introuvable.", employee });
+      .send({ success: true, message: "Employé·e introuvable.", employee });
+
+  const updatedData = {
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    profilePicture: req.body.profilePicture? req.body.profilePicture : employee.profilePicture,
+  };
 
   try {
     await Employees.update(updatedData, {
@@ -64,12 +65,12 @@ export const update = async (req, res) => {
     });
     return res.status(200).send({
       success: true,
-      message: "Le compte de l'employé a été mis à jour avec succès.",
+      message: "Le compte de l'employé·e a été mis à jour avec succès.",
     });
   } catch (err) {
     return res.status(500).send({
       success: false,
-      message: "Le compte de l'employé n'a pas pu être mis à jour.",
+      message: "Le compte de l'employé·e n'a pas pu être mis à jour.",
     });
   }
 };
@@ -81,8 +82,8 @@ export const findOne = async (req, res) => {
   return res.status(employee ? 200 : 404).send({
     success: employee ? true : false,
     message: employee
-      ? `Employé avec id n°${employee.id} a été trouvé avec succès.`
-      : "Employé introuvable.",
+      ? `Employé·e avec id n°${employee.id} a été trouvé avec succès.`
+      : "Employé·e introuvable.",
     employee,
   });
 };
@@ -91,7 +92,7 @@ export const findAll = async (req, res) => {
   const allEmployees = await Employees.findAll();
   return res.status(200).send({
     success: true,
-    message: `${allEmployees.length} employés on été trouvés.`,
+    message: `${allEmployees.length} employé·es on été trouvés.`,
     allEmployees,
   });
 };
@@ -102,7 +103,7 @@ export const remove = async (req, res) => {
   });
   return res.status(employee ? 200 : 404).send({
     success: employee ? true : false,
-    message: employee ? "Employé supprimé avec succès." : "Employé introuvable.",
+    message: employee ? "Employé·e supprimé avec succès." : "Employé·e introuvable.",
     employee,
   });
 };
@@ -136,7 +137,7 @@ export const login = async (req, res) => {
             .status(202)
             .json({
               success: true,
-              message: `L'employé n°${employee.id} a été connecté avec succès.`,
+              message: `L'employé·e n°${employee.id} a été connecté avec succès.`,
               data: employee,
               token,
             });
@@ -147,7 +148,7 @@ export const login = async (req, res) => {
         .status(503)
         .json({
           success: false,
-          message: "L'employé n'a PAS été connecté. Veuillez réessayer.",
+          message: "L'employé·e n'a PAS été connecté. Veuillez réessayer.",
           error: error,
         })
     );
