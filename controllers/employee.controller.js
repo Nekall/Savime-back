@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Employees from "../models/employee.model.js";
-const { FRONT_LINK, JWT_SECRET } = process.env;
+const { FRONT_LINK, JWT_SECRET, NO_PROFILE_PICTURE } = process.env;
 
 // Helpers
 import { sendMail } from "../helpers/sendMail.js";
@@ -23,6 +23,7 @@ export const create = async (req, res) => {
         lastname: lastname,
         email: email,
         password: hashPassword,
+        profilePicture: NO_PROFILE_PICTURE,
       });
       return res.status(201).send({
         success: true,
