@@ -43,8 +43,9 @@ export const create = async (req, res) => {
 };
 
 export const update = async (req, res) => {
+  console.log(req.body);
   const employee = await Employees.findOne({
-    where: { id: req.params.id },
+    where: { employee_id: req.params.id },
   });
   if (employee === null)
     return res
@@ -55,13 +56,14 @@ export const update = async (req, res) => {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
+    job: req.body.job,
     profilePicture: req.body.profilePicture? req.body.profilePicture : employee.profilePicture,
   };
 
   try {
     await Employees.update(updatedData, {
       where: {
-        id: req.params.id,
+        employee_id: req.params.id,
       },
     });
     return res.status(200).send({
@@ -72,13 +74,14 @@ export const update = async (req, res) => {
     return res.status(500).send({
       success: false,
       message: "Le compte de l'employé·e n'a pas pu être mis à jour.",
+      error: err,
     });
   }
 };
 
 export const findOne = async (req, res) => {
   const employee = await Employees.findOne({
-    where: { id: req.params.id },
+    where: { employee_id: req.params.id },
   });
   return res.status(employee ? 200 : 404).send({
     success: employee ? true : false,
@@ -100,7 +103,7 @@ export const findAll = async (req, res) => {
 
 export const remove = async (req, res) => {
   const employee = await Employees.findOne({
-    where: { id: req.params.id },
+    where: { employee_id: req.params.id },
   });
   return res.status(employee ? 200 : 404).send({
     success: employee ? true : false,
