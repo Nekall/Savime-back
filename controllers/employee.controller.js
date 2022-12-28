@@ -97,7 +97,7 @@ export const findAll = async (req, res) => {
   return res.status(200).send({
     success: true,
     message: `${allEmployees.length} employé·es on été trouvés.`,
-    allEmployees,
+    data: allEmployees,
   });
 };
 

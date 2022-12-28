@@ -89,7 +89,7 @@ export const findAll = async (req, res) => {
   return res.status(200).send({
     success: true,
     message: `${allManagers.length} managers trouvés..`,
-    allManagers,
+    data: allManagers,
   });
 };
 
