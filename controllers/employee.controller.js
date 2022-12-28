@@ -162,7 +162,7 @@ export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   const employee = await Employees.findOne({ where: { email: email } });
   if(employee){
-    const token = jwt.sign({ id: employee.id, email: employee.email }, JWT_SECRET, {
+    const token = jwt.sign({ employeeId: employee.id, email: employee.email }, JWT_SECRET, {
       expiresIn: "10m",
     });
     await Employees.update({ resetToken: token }, { where: { id: employee.id } });
@@ -207,7 +207,7 @@ export const resetPassword = async (req, res) => {
     }
 
     if(employee){
-      await Employees.update({ password: hashPassword, resetToken: null }, { where: { id: employee.id } });
+      await Employees.update({ password: hashPassword, resetToken: null }, { where: { employee_id: employee.employee_id } });
       return res.status(200).json({ success: true, message: "Mot de passe mis à jour." });
     } else {
       return res.status(404).json({ success: false, message: "Le compte n'existe pas." });

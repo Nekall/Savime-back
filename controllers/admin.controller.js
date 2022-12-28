@@ -20,7 +20,7 @@ export const login = async (req, res) => {
                 .json({ succes: false, message: "Mot de passe incorrect." });
 
             const payload = {
-                adminId: admin.admin_id,
+                admin_id: admin.admin_id,
                 role: "admin",
             };
 

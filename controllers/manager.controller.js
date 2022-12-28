@@ -46,7 +46,7 @@ export const update = async (req, res) => {
   };
 
   const manager = await Managers.findOne({
-    where: { id: req.params.id },
+    where: { manager_id: req.params.id },
   });
   if (manager === null)
     return res
@@ -56,7 +56,7 @@ export const update = async (req, res) => {
   try {
     await Managers.update(updatedData, {
       where: {
-        id: req.params.id,
+        manager_id: req.params.id,
       },
     });
     return res.status(200).send({
@@ -73,12 +73,12 @@ export const update = async (req, res) => {
 
 export const findOne = async (req, res) => {
   const manager = await Managers.findOne({
-    where: { id: req.params.id },
+    where: { manager_id: req.params.id },
   });
   return res.status(manager ? 200 : 404).send({
     success: manager ? true : false,
     message: manager
-      ? `Manager avec id n°${manager.id} a été trouvé avec succès.`
+      ? `Manager avec id n°${manager.manager_id} a été trouvé avec succès.`
       : "Manager introuvable.",
     manager,
   });
@@ -95,7 +95,7 @@ export const findAll = async (req, res) => {
 
 export const remove = async (req, res) => {
   const manager = await Managers.findOne({
-    where: { id: req.params.id },
+    where: { manager_id: req.params.id },
   });
   return res.status(manager ? 200 : 404).send({
     success: manager ? true : false,
@@ -154,10 +154,10 @@ export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   const manager = await Managers.findOne({ where: { email: email } });
   if(manager){
-    const token = jwt.sign({ id: manager.id, email: manager.email }, JWT_SECRET, {
+    const token = jwt.sign({ manager_id: manager.manager_id, email: manager.email }, JWT_SECRET, {
       expiresIn: "10m",
     });
-    await Managers.update({ resetToken: token }, { where: { id: manager.id } });
+    await Managers.update({ resetToken: token }, { where: { manager_id: manager.manager_id } });
     const response = await sendMail(
       email, 
       "Savime | Demande reinitialisation du mot de passe", 
@@ -199,7 +199,7 @@ export const resetPassword = async (req, res) => {
     }
 
     if(manager){
-      await Managers.update({ password: hashPassword, resetToken: null }, { where: { id: manager.id } });
+      await Managers.update({ password: hashPassword, resetToken: null }, { where: { manager_id: manager.id } });
       return res.status(200).json({ success: true, message: "Mot de passe mis à jour." });
     } else {
       return res.status(404).json({ success: false, message: "Le compte n'existe pas." });

@@ -15,7 +15,7 @@ export const create = async (req, res) => {
 
 export const deleteDoc = async (req, res) => {
   const document = await Documents.findOne({
-    where: { id: req.params.id },
+    where: { document_id: req.params.id },
   });
   if (document === null)
     return res
@@ -25,7 +25,7 @@ export const deleteDoc = async (req, res) => {
   try {
     await Documents.destroy({
       where: {
-        id: req.params.id,
+        document_id: req.params.id,
       },
     });
     return res.status(200).send({
@@ -42,7 +42,7 @@ export const deleteDoc = async (req, res) => {
 
 export const findOne = async (req, res) => {
   const document = await Documents.findOne({
-    where: { id: req.params.id },
+    where: { document_id: req.params.id },
   });
   return res.status(document ? 200 : 404).send({
     success: document ? true : false,
@@ -64,7 +64,7 @@ export const findAll = async (req, res) => {
 
 export const findAllByEmployee = async (req, res) => {
   const allDocuments = await Documents.findAll({
-    where: { employeeId: req.params.id },
+    where: { document_id: req.params.id },
   });
 
   return res.status(200).send({
