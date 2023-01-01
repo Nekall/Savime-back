@@ -4,7 +4,7 @@
 
 # Savime
 ### «The time-saver for teams & companies.»
-Application orienté RH, Savime sert à créer une communication rapide, simple & sécurisée entre des employé·es et le département RH d'une entreprise.
+Application orienté RH, Savime `seɪv ɪm` sert à créer une communication rapide, simple & sécurisée entre des employé·es et le département RH d'une entreprise.
 Que se soit le partage de documents, la gestion des congés ou l’accès aux informations importantes lié à l’entreprise & la carrière des employé·es.
 Cette application se veux clef en main.
 
