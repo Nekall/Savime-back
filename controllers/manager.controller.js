@@ -9,6 +9,7 @@ export const create = async (req, res) => {
     return res.status(400).json({ success: true, message: "Les mots de passe ne sont pas les mêmes." });
   }
   const accountExists = await Managers.findOne({
+    attributes: {exclude: ["password", "resetToken"]},
     where: { email: req.body.email },
   });
   if (!accountExists) {
@@ -73,6 +74,7 @@ export const update = async (req, res) => {
 
 export const findOne = async (req, res) => {
   const manager = await Managers.findOne({
+    attributes: {exclude: ["password", "resetToken"]},
     where: { manager_id: req.params.id },
   });
   return res.status(manager ? 200 : 404).send({
@@ -85,7 +87,9 @@ export const findOne = async (req, res) => {
 };
 
 export const findAll = async (req, res) => {
-  const allManagers = await Managers.findAll();
+  const allManagers = await Managers.findAll({
+    attributes: { exclude: ["password", "resetToken"] },
+  });
   return res.status(200).send({
     success: true,
     message: `${allManagers.length} managers trouvés..`,

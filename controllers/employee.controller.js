@@ -81,6 +81,7 @@ export const update = async (req, res) => {
 
 export const findOne = async (req, res) => {
   const employee = await Employees.findOne({
+    attributes: {exclude: ["password", "resetToken"]},
     where: { employee_id: req.params.id },
   });
   return res.status(employee ? 200 : 404).send({
@@ -93,7 +94,9 @@ export const findOne = async (req, res) => {
 };
 
 export const findAll = async (req, res) => {
-  const allEmployees = await Employees.findAll();
+  const allEmployees = await Employees.findAll({
+    attributes: { exclude: ["password", "resetToken"] },
+  });
   return res.status(200).send({
     success: true,
     message: `${allEmployees.length} employé·es on été trouvés.`,

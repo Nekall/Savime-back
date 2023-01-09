@@ -33,6 +33,10 @@ const Managers = db.define("managers", {
       isEmail: { message: "Must be a valid email adress" },
     },
   },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   password: { type: DataTypes.STRING, allowNull: false },
   resetToken: { type: DataTypes.STRING, allowNull: true },
   profilePicture: {
