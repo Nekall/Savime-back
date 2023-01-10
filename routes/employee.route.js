@@ -1,5 +1,4 @@
-
-import express from 'express';
+import express from "express";
 import {
   create,
   findOne,
@@ -9,17 +8,17 @@ import {
   login,
   forgotPassword,
   resetPassword,
-} from '../controllers/employee.controller.js';
+} from "../controllers/employee.controller.js";
 const router = express.Router();
 
-router.post('/', create);
-router.get('/:id', findOne);
-router.get('/', findAll);
-router.put('/:id', update);
-router.delete('/:id', remove);
+router.post("/", create);
+router.get("/:id", findOne);
+router.get("/", findAll);
+router.put("/:id", update);
+router.delete("/:id", remove);
 
-router.post('/login', login);
-router.post('/forgot-password', forgotPassword);
-router.post('/reset-password/:token', resetPassword);
+router.post("/login", login);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
 export default router;

@@ -13,6 +13,7 @@ import globalRoutes from "./routes/global.route.js";
 import adminRoutes from "./routes/admin.route.js";
 import documentRoutes from "./routes/document.route.js";
 import newsRoutes from "./routes/new.route.js";
+import companyInformationRoutes from "./routes/companyInformation.route.js"
 
 // Associations
 import Documents from "./models/document.model.js";
@@ -47,6 +48,7 @@ app.use("/managers", managerRoutes);
 app.use("/documents", documentRoutes);
 app.use("/admin", adminRoutes);
 app.use("/news", newsRoutes);
+app.use("/company-information", companyInformationRoutes);
 
 Employees.hasMany(Documents, {
   foreignKey: "employee_id",

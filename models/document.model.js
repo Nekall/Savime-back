@@ -1,5 +1,4 @@
 import { Sequelize, DataTypes } from "sequelize";
-import Employees from "./employee.model.js";
 import db from "../server.js";
 
 const Documents = db.define("documents", {
@@ -20,6 +19,14 @@ const Documents = db.define("documents", {
   },
   document: {
     type: DataTypes.TEXT,
+    allowNull: false,
+    validate: {
+      notNull: { message: "Document cannot be null" },
+      notEmpty: { message: "Document cannot be empty" },
+    },
+  },
+  type: {
+    type: DataTypes.ENUM("attestation", "contract", "payslip"),
     allowNull: false,
     validate: {
       notNull: { message: "Document cannot be null" },

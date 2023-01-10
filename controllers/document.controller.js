@@ -1,4 +1,5 @@
 import Documents from "../models/document.model.js";
+import Employees from "../models/employee.model.js";
 
 export const create = async (req, res) => {
   const { name, document, employeeId } = req.body;
@@ -64,12 +65,13 @@ export const findAll = async (req, res) => {
 
 export const findAllByEmployee = async (req, res) => {
   const allDocuments = await Documents.findAll({
-    where: { document_id: req.params.id },
+    where: { employee_id: req.params.id },
+    include: Employees 
   });
 
   return res.status(200).send({
     success: true,
     message: `${allDocuments.length} documents on été trouvés.`,
-    allDocuments,
+    data: allDocuments,
   });
 }
