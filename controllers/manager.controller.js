@@ -6,10 +6,15 @@ const { FRONT_LINK, JWT_SECRET } = process.env;
 export const create = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   if (password != confirmPassword) {
-    return res.status(400).json({ success: true, message: "Les mots de passe ne sont pas les mêmes." });
+    return res
+      .status(400)
+      .json({
+        success: true,
+        message: "Les mots de passe ne sont pas les mêmes.",
+      });
   }
   const accountExists = await Managers.findOne({
-    attributes: {exclude: ["password", "resetToken"]},
+    attributes: { exclude: ["password", "resetToken"] },
     where: { email: req.body.email },
   });
   if (!accountExists) {
@@ -44,6 +49,7 @@ export const update = async (req, res) => {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
+    phone: req.body.phone,
   };
 
   const manager = await Managers.findOne({
@@ -74,7 +80,7 @@ export const update = async (req, res) => {
 
 export const findOne = async (req, res) => {
   const manager = await Managers.findOne({
-    attributes: {exclude: ["password", "resetToken"]},
+    attributes: { exclude: ["password", "resetToken"] },
     where: { manager_id: req.params.id },
   });
   return res.status(manager ? 200 : 404).send({
@@ -82,7 +88,7 @@ export const findOne = async (req, res) => {
     message: manager
       ? `Manager avec id n°${manager.manager_id} a été trouvé avec succès.`
       : "Manager introuvable.",
-    manager,
+    data: manager,
   });
 };
 
@@ -103,7 +109,9 @@ export const remove = async (req, res) => {
   });
   return res.status(manager ? 200 : 404).send({
     success: manager ? true : false,
-    message: manager ? "Le manager a été supprimé avec succès" : "Manager introuvable.",
+    message: manager
+      ? "Le manager a été supprimé avec succès"
+      : "Manager introuvable.",
     manager,
   });
 };
@@ -124,47 +132,50 @@ export const login = async (req, res) => {
               .status(401)
               .json({ succes: false, message: "Mot de passe incorrect." });
 
-              const payload = {
-                managerId: manager.manager_id,
-                role: "Manager",
-              };
+          const payload = {
+            managerId: manager.manager_id,
+            role: "Manager",
+          };
 
-              const token = jwt.sign(payload, JWT_SECRET, {
+          const token = jwt.sign(payload, JWT_SECRET, {
             expiresIn: "24h",
           });
 
-          return res
-            .status(202)
-            .json({
-              success: true,
-              message: "Le manager a été connecté avec succès.",
-              data: manager,
-              token,
-            });
+          return res.status(202).json({
+            success: true,
+            message: "Le manager a été connecté avec succès.",
+            data: manager,
+            token,
+          });
         });
     })
     .catch((error) =>
-      res
-        .status(503)
-        .json({
-          success: false,
-          message: `Le manager n'a PAS été connecté. Veuillez réessayer.`,
-          error: error,
-        })
+      res.status(503).json({
+        success: false,
+        message: `Le manager n'a PAS été connecté. Veuillez réessayer.`,
+        error: error,
+      })
     );
 };
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   const manager = await Managers.findOne({ where: { email: email } });
-  if(manager){
-    const token = jwt.sign({ manager_id: manager.manager_id, email: manager.email }, JWT_SECRET, {
-      expiresIn: "10m",
-    });
-    await Managers.update({ resetToken: token }, { where: { manager_id: manager.manager_id } });
+  if (manager) {
+    const token = jwt.sign(
+      { manager_id: manager.manager_id, email: manager.email },
+      JWT_SECRET,
+      {
+        expiresIn: "10m",
+      }
+    );
+    await Managers.update(
+      { resetToken: token },
+      { where: { manager_id: manager.manager_id } }
+    );
     const response = await sendMail(
-      email, 
-      "Savime | Demande reinitialisation du mot de passe", 
+      email,
+      "Savime | Demande reinitialisation du mot de passe",
       `Cliquez sur ce lien pour reinitialiser votre mot de passe : <br/>
       <a href="${FRONT_LINK}/reinitialisation-mot-de-passe/${token}">REINITIALISER</a><br/>
       Ce lien est valide pendant 10 minutes.<br/>
@@ -173,11 +184,15 @@ export const forgotPassword = async (req, res) => {
       L'équipe Savime<br/>
       <br/>
       ${FRONT_LINK}/reinitialisation-mot-de-passe/${token}
-      `,
-      );
-      return res.status(200).json({ success: true, data: response, message: "Mail envoyé." });
+      `
+    );
+    return res
+      .status(200)
+      .json({ success: true, data: response, message: "Mail envoyé." });
   } else {
-    return res.status(404).json({ success: false, message: "Le compte n'existe pas." });
+    return res
+      .status(404)
+      .json({ success: false, message: "Le compte n'existe pas." });
   }
 };
 
@@ -186,27 +201,45 @@ export const resetPassword = async (req, res) => {
   const { token } = req.params;
 
   if (password !== confirmPassword) {
-    return res.status(400).json({ success: false, message: "Les mots de passe ne sont pas les mêmes." });
+    return res
+      .status(400)
+      .json({
+        success: false,
+        message: "Les mots de passe ne sont pas les mêmes.",
+      });
   }
 
   jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
     if (err) {
-      return res.status(400).json({ success: false, message: "Lien non valide ou expiré." });
+      return res
+        .status(400)
+        .json({ success: false, message: "Lien non valide ou expiré." });
     }
 
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
-    const manager = await Managers.findOne({ where: { email: decodedToken.email } });
+    const manager = await Managers.findOne({
+      where: { email: decodedToken.email },
+    });
 
-    if(manager.resetToken !== token){
-      return res.status(400).json({ success: false, message: "Lien non valide ou expiré." });
+    if (manager.resetToken !== token) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Lien non valide ou expiré." });
     }
 
-    if(manager){
-      await Managers.update({ password: hashPassword, resetToken: null }, { where: { manager_id: manager.id } });
-      return res.status(200).json({ success: true, message: "Mot de passe mis à jour." });
+    if (manager) {
+      await Managers.update(
+        { password: hashPassword, resetToken: null },
+        { where: { manager_id: manager.id } }
+      );
+      return res
+        .status(200)
+        .json({ success: true, message: "Mot de passe mis à jour." });
     } else {
-      return res.status(404).json({ success: false, message: "Le compte n'existe pas." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Le compte n'existe pas." });
     }
   });
-}
+};

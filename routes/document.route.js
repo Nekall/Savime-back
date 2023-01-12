@@ -4,14 +4,16 @@ import {
   findOne,
   findAll,
   deleteDoc,
-  findAllByEmployee
+  findAllByEmployee,
+  update
 } from "../controllers/document.controller.js";
 const router = express.Router();
 
 router.post("/", create);
 router.get("/:id", findOne);
+router.put("/:id", update);
 router.get("/", findAll);
-router.delete("/", deleteDoc);
+router.delete("/:id", deleteDoc);
 router.get("/employee/:id", findAllByEmployee)
 
 export default router;

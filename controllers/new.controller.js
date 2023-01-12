@@ -81,9 +81,9 @@ export const findOne = async (req, res) => {
     message: news
       ? `Actualité avec id n°${news.new_id} a été trouvé avec succès.`
       : "Actualité introuvable.",
-      news,
+    data: news,
   });
-}
+};
 
 export const findAll = async (req, res) => {
   const allNews = await News.findAll();
@@ -92,4 +92,4 @@ export const findAll = async (req, res) => {
     message: `${allNews.length} actualités on été trouvés.`,
     data: allNews,
   });
-}
+};

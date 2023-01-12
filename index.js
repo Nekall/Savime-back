@@ -48,7 +48,7 @@ app.use("/managers", managerRoutes);
 app.use("/documents", documentRoutes);
 app.use("/admin", adminRoutes);
 app.use("/news", newsRoutes);
-app.use("/company-information", companyInformationRoutes);
+app.use("/company-informations", companyInformationRoutes);
 
 Employees.hasMany(Documents, {
   foreignKey: "employee_id",

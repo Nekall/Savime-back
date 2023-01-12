@@ -9,9 +9,9 @@ const router = express.Router();
 
 router.post("/", create);
 router.get("/", findAll);
-// ##################
-router.get("/:id", update);
+router.put("/:id", update);
 router.get("/:id", findOne);
+// ##################
 router.delete("/", deleteInfo);
 
 export default router;
