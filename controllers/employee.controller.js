@@ -48,7 +48,6 @@ export const create = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  console.log(req.body);
   const employee = await Employees.findOne({
     where: { employee_id: req.params.id },
   });
@@ -251,3 +250,37 @@ export const resetPassword = async (req, res) => {
     }
   });
 };
+
+// A proteger (Manager | Admin)
+export const verified = async (req, res) => {
+  const employee = await Employees.findOne({
+    where: { employee_id: req.params.id },
+  });
+  if (employee === null)
+    return res
+      .status(404)
+      .send({ success: true, message: "Employé·e introuvable.", employee });
+
+  try {
+    await Employees.update(
+      {
+        verified: !employee.verified,
+      },
+      {
+        where: {
+          employee_id: req.params.id,
+        },
+      }
+    );
+    return res.status(200).send({
+      success: true,
+      message: "Le compte de l'employé·e a été vérifié avec succès.",
+    });
+  } catch (err) {
+    return res.status(500).send({
+      success: false,
+      message: "Le compte de l'employé·e n'a pas pu être vérifié.",
+      error: err,
+    });
+  }
+}

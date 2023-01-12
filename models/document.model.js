@@ -15,7 +15,6 @@ const Documents = db.define("documents", {
       notNull: { message: "Document must have a name" },
       notEmpty: { message: "Document name must not be empty" },
     },
-    unique: true,
   },
   document: {
     type: DataTypes.TEXT,

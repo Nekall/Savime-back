@@ -8,6 +8,7 @@ import {
   login,
   forgotPassword,
   resetPassword,
+  verified,
 } from "../controllers/employee.controller.js";
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.post("/", create);
 router.get("/:id", findOne);
 router.get("/", findAll);
 router.put("/:id", update);
+router.put("/verified/:id", verified);
 router.delete("/:id", remove);
 
 router.post("/login", login);
