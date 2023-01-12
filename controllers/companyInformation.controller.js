@@ -40,7 +40,7 @@ export const update = async (req, res) => {
   };
 
   try {
-    await News.update(updatedData, {
+    await CompanyInformation.update(updatedData, {
       where: {
         company_information_id: req.params.id,
       },
