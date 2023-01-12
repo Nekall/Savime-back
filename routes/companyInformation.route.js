@@ -4,12 +4,14 @@ import { findAll,
     update,
     findOne,
     deleteInfo,
+    updateAll
 } from "../controllers/companyInformation.controller.js";
 const router = express.Router();
 
 router.post("/", create);
 router.get("/", findAll);
-router.put("/:id", update);
+router.patch("/:id", update);
+router.put("/", updateAll);
 router.get("/:id", findOne);
 // ##################
 router.delete("/", deleteInfo);

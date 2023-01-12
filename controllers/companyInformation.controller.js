@@ -101,3 +101,29 @@ export const findOne = async (req, res) => {
     data: companyInformation,
   });
 };
+
+
+export const updateAll = async (req, res) => {
+  const updatedCompagnyInfos = req.body;
+
+  const promises = updatedCompagnyInfos.map(async (compagnyInfo) => {
+      await CompanyInformation.update(compagnyInfo, {
+        where: {
+          company_information_id: compagnyInfo.company_information_id,
+        },
+      });
+    })
+
+  try {
+    await Promise.all(promises);
+    return res.status(200).send({
+      success: true,
+      message: "Les informations de l'entreprise ont été mises à jour avec succès.",
+    });
+  } catch (err) {
+    return res.status(500).send({
+      success: false,
+      message: "Les informations de l'entreprise n'ont pas pu être mises à jour.",
+    });
+  }
+};

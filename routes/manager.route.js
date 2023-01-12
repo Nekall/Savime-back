@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/", create);
 router.get("/:id", findOne);
 router.get("/", findAll);
-router.put("/:id", update);
+router.patch("/:id", update);
 router.delete("/:id", remove);
 
 router.post("/login", login);

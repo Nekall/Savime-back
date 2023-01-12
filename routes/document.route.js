@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/", create);
 router.get("/:id", findOne);
-router.put("/:id", update);
+router.patch("/:id", update);
 router.get("/", findAll);
 router.delete("/:id", deleteDoc);
 router.get("/employee/:id", findAllByEmployee)
