@@ -4,6 +4,7 @@
   "description": "The time-saver for teams & companies",
   "main": "index.js",
   "type": "module",
+  "engines": "16.17.1",
   "scripts": {
     "dev": "APP_ENV=development nodemon index.js",
     "prod": "APP_ENV=production node index.js"
