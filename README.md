@@ -37,6 +37,7 @@ DB_NAME="XXXXXXX_db"
 DB_USER="XXXXXXX"
 DB_PASSWORD="XXXXXXX"
 DB_PORT=XXXXXXX
+DB_HOST=xxxxxxxxxxxxxxxxxxx
 
 ```
 
