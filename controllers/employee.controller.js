@@ -9,12 +9,10 @@ import { sendMail } from "../helpers/sendMail.js";
 export const create = async (req, res) => {
   const { firstname, lastname, email, password, confirmPassword } = req.body;
   if (password != confirmPassword) {
-    return res
-      .status(400)
-      .json({
-        success: true,
-        message: "Les mots de passe ne sont pas les mêmes.",
-      });
+    return res.status(400).json({
+      success: true,
+      message: "Les mots de passe ne sont pas les mêmes.",
+    });
   }
   const accountExists = await Employees.findOne({
     where: { email: req.body.email },
@@ -56,6 +54,23 @@ export const update = async (req, res) => {
       .status(404)
       .send({ success: true, message: "Employé·e introuvable.", employee });
 
+  if (req.body.password) {
+    if (
+      !req.body.password.match(
+        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Le mot de passe n'a pas un format correct.",
+      });
+    }
+  }
+
+  const salt = await bcrypt.genSalt();
+  const hashPassword = req.body.password
+    ? await bcrypt.hash(req.body.password, salt)
+    : employee.password;
   const updatedData = {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -64,6 +79,7 @@ export const update = async (req, res) => {
     profilePicture: req.body.profilePicture
       ? req.body.profilePicture
       : employee.profilePicture,
+    password: hashPassword,
   };
 
   try {
@@ -208,12 +224,10 @@ export const resetPassword = async (req, res) => {
   const { token } = req.params;
 
   if (password !== confirmPassword) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "Les mots de passe ne sont pas les mêmes.",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "Les mots de passe ne sont pas les mêmes.",
+    });
   }
 
   jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
@@ -283,4 +297,4 @@ export const verified = async (req, res) => {
       error: err,
     });
   }
-}
+};

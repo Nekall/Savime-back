@@ -58,37 +58,6 @@ export const update = async (req, res) => {
   }
 };
 
-export const deleteInfo = async (req, res) => {
-  const companyInformation = await CompanyInformation.findOne({
-    where: { company_information_id: req.params.id },
-  });
-  if (companyInformation === null)
-    return res
-      .status(404)
-      .send({
-        success: true,
-        message: "Information de l'entreprise introuvable.",
-        companyInformation,
-      });
-
-  try {
-    await CompanyInformation.destroy({
-      where: {
-        company_information_id: req.params.id,
-      },
-    });
-    return res.status(200).send({
-      success: true,
-      message: "L'information de l'entreprise a été supprimé avec succès.",
-    });
-  } catch (err) {
-    return res.status(500).send({
-      success: false,
-      message: "L'information de l'entreprise n'a pas pu être supprimé.",
-    });
-  }
-};
-
 export const findOne = async (req, res) => {
   const companyInformation = await CompanyInformation.findOne({
     where: { company_information_id: req.params.id },
