@@ -4,7 +4,7 @@ import {
   findOne,
   findAll,
   update,
-  remove,
+  deleteEmployee,
   login,
   forgotPassword,
   resetPassword,
@@ -17,7 +17,7 @@ router.get("/:id", findOne);
 router.get("/", findAll);
 router.patch("/:id", update);
 router.patch("/verified/:id", verified);
-router.delete("/:id", remove);
+router.delete("/:id", deleteEmployee);
 
 router.post("/login", login);
 router.post("/forgot-password", forgotPassword);

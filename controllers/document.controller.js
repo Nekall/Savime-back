@@ -24,10 +24,12 @@ export const update = async (req, res) => {
       .send({ success: true, message: "Document introuvable.", document });
 
   const updatedData = {
-    name: req.body.name? req.body.name : document.name,
-    document: req.body.document? req.body.document : document.document,
-    type: req.body.type? req.body.type : document.type,
-    employee_id: req.body.employee_id? req.body.employee_id : document.employee_id,
+    name: req.body.name ? req.body.name : document.name,
+    document: req.body.document ? req.body.document : document.document,
+    type: req.body.type ? req.body.type : document.type,
+    employee_id: req.body.employee_id
+      ? req.body.employee_id
+      : document.employee_id,
   };
 
   try {
@@ -53,26 +55,27 @@ export const deleteDoc = async (req, res) => {
   const document = await Documents.findOne({
     where: { document_id: req.params.id },
   });
-  if (document === null)
+  if (document) {
+    try {
+      await Documents.destroy({
+        where: {
+          document_id: req.params.id,
+        },
+      });
+      return res.status(200).send({
+        success: true,
+        message: "Le document a été supprimé avec succès.",
+      });
+    } catch (err) {
+      return res.status(500).send({
+        success: false,
+        message: "Le document n'a pas pu être supprimé.",
+      });
+    }
+  } else {
     return res
       .status(404)
-      .send({ success: true, message: "Document introuvable.", document });
-
-  try {
-    await Documents.destroy({
-      where: {
-        document_id: req.params.id,
-      },
-    });
-    return res.status(200).send({
-      success: true,
-      message: "Le document a été supprimé avec succès.",
-    });
-  } catch (err) {
-    return res.status(500).send({
-      success: false,
-      message: "Le document n'a pas pu être supprimé.",
-    });
+      .send({ success: true, message: "Document introuvable." });
   }
 };
 

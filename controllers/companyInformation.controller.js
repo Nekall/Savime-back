@@ -9,6 +9,7 @@ export const create = async (req, res) => {
   return res.status(201).send({
     success: true,
     message: "Information de l'entreprise créé avec succès.",
+    data: newCompanyInformation,
   });
 };
 
@@ -26,13 +27,11 @@ export const update = async (req, res) => {
     where: { company_information_id: req.params.id },
   });
   if (companyInformation === null)
-    return res
-      .status(404)
-      .send({
-        success: true,
-        message: "Information de l'entreprise introuvable.",
-        companyInformation,
-      });
+    return res.status(404).send({
+      success: true,
+      message: "Information de l'entreprise introuvable.",
+      companyInformation,
+    });
 
   const updatedData = {
     name: req.body.name,
@@ -71,28 +70,60 @@ export const findOne = async (req, res) => {
   });
 };
 
-
 export const updateAll = async (req, res) => {
   const updatedCompagnyInfos = req.body;
 
   const promises = updatedCompagnyInfos.map(async (compagnyInfo) => {
-      await CompanyInformation.update(compagnyInfo, {
-        where: {
-          company_information_id: compagnyInfo.company_information_id,
-        },
-      });
-    })
+    await CompanyInformation.update(compagnyInfo, {
+      where: {
+        company_information_id: compagnyInfo.company_information_id,
+      },
+    });
+  });
 
   try {
     await Promise.all(promises);
     return res.status(200).send({
       success: true,
-      message: "Les informations de l'entreprise ont été mises à jour avec succès.",
+      message:
+        "Les informations de l'entreprise ont été mises à jour avec succès.",
     });
   } catch (err) {
     return res.status(500).send({
       success: false,
-      message: "Les informations de l'entreprise n'ont pas pu être mises à jour.",
+      message:
+        "Les informations de l'entreprise n'ont pas pu être mises à jour.",
     });
+  }
+};
+
+export const deleteCompanyInformation = async (req, res) => {
+  const companyInformation = await CompanyInformation.findOne({
+    where: { company_information_id: req.params.id },
+  });
+  if (companyInformation) {
+    try {
+      await CompanyInformation.destroy({
+        where: {
+          company_information_id: req.params.id,
+        },
+      });
+      return res.status(200).send({
+        success: true,
+        message: "Information de l'entreprise supprimé avec succès.",
+      });
+    } catch (err) {
+      return res.status(500).send({
+        success: false,
+        message: "L'information de l'entreprise n'a pas pu être supprimé.",
+      });
+    }
+  } else {
+    return res
+      .status(404)
+      .send({
+        success: true,
+        message: "Information de l'entreprise introuvable.",
+      });
   }
 };

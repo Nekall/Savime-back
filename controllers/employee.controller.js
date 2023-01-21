@@ -126,17 +126,33 @@ export const findAll = async (req, res) => {
   });
 };
 
-export const remove = async (req, res) => {
+export const deleteEmployee = async (req, res) => {
   const employee = await Employees.findOne({
     where: { employee_id: req.params.id },
   });
-  return res.status(employee ? 200 : 404).send({
-    success: employee ? true : false,
-    message: employee
-      ? "Employé·e supprimé avec succès."
-      : "Employé·e introuvable.",
-    employee,
-  });
+
+  if (employee) {
+    try {
+      await Employees.destroy({
+        where: { employee_id: req.params.id },
+      });
+      return res.status(200).send({
+        success: true,
+        message: "Le compte de l'employé·e a été supprimé avec succès.",
+      });
+    } catch (error) {
+      return res.status(400).send({
+        success: false,
+        message: "Le compte de l'employé·e n'a pas pu être supprimé.",
+        error: error,
+      });
+    }
+  } else {
+    return res.status(404).send({
+      success: false,
+      message: "Employé·e introuvable.",
+    });
+  }
 };
 
 export const login = async (req, res) => {

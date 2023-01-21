@@ -4,37 +4,31 @@ import Managers from "../models/manager.model.js";
 const { FRONT_LINK, JWT_SECRET } = process.env;
 
 export const create = async (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
-  if (password != confirmPassword) {
-    return res
-      .status(400)
-      .json({
-        success: true,
-        message: "Les mots de passe ne sont pas les mêmes.",
-      });
-  }
+  const { firstname, lastname, phone, email, password } = req.body;
   const accountExists = await Managers.findOne({
-    attributes: { exclude: ["password", "resetToken"] },
     where: { email: req.body.email },
   });
   if (!accountExists) {
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
     try {
-      await Managers.create({
+      const manager = await Managers.create({
         firstname: firstname,
         lastname: lastname,
+        phone: phone,
         email: email,
         password: hashPassword,
       });
       return res.status(201).send({
         success: true,
         message: "Le compte du manager a été créé avec succès.",
+        data: manager,
       });
     } catch (error) {
       return res.status(400).send({
         success: false,
         message: "Le compte du manager n'a pas pu être créé.",
+        data: error,
       });
     }
   } else {
@@ -103,17 +97,33 @@ export const findAll = async (req, res) => {
   });
 };
 
-export const remove = async (req, res) => {
+export const deleteManager = async (req, res) => {
   const manager = await Managers.findOne({
     where: { manager_id: req.params.id },
   });
-  return res.status(manager ? 200 : 404).send({
-    success: manager ? true : false,
-    message: manager
-      ? "Le manager a été supprimé avec succès"
-      : "Manager introuvable.",
-    manager,
-  });
+
+  if (manager) {
+    try {
+      await Managers.destroy({
+        where: { manager_id: req.params.id },
+      });
+      return res.status(200).send({
+        success: true,
+        message: "Le compte du manager a été supprimé avec succès.",
+      });
+    } catch (error) {
+      return res.status(400).send({
+        success: false,
+        message: "Le compte du manager n'a pas pu être supprimé.",
+        error: error,
+      });
+    }
+  } else {
+    return res.status(404).send({
+      success: false,
+      message: "Manager introuvable.",
+    });
+  }
 };
 
 export const login = async (req, res) => {
@@ -201,12 +211,10 @@ export const resetPassword = async (req, res) => {
   const { token } = req.params;
 
   if (password !== confirmPassword) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "Les mots de passe ne sont pas les mêmes.",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "Les mots de passe ne sont pas les mêmes.",
+    });
   }
 
   jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {

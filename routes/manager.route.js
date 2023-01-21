@@ -4,7 +4,7 @@ import {
   findOne,
   findAll,
   update,
-  remove,
+  deleteManager,
   login,
 } from "../controllers/manager.controller.js";
 const router = express.Router();
@@ -13,7 +13,7 @@ router.post("/", create);
 router.get("/:id", findOne);
 router.get("/", findAll);
 router.patch("/:id", update);
-router.delete("/:id", remove);
+router.delete("/:id", deleteManager);
 
 router.post("/login", login);
 

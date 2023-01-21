@@ -49,26 +49,27 @@ export const deleteNews = async (req, res) => {
   const news = await News.findOne({
     where: { new_id: req.params.id },
   });
-  if (news === null)
+  if (news) {
+    try {
+      await News.destroy({
+        where: {
+          new_id: req.params.id,
+        },
+      });
+      return res.status(200).send({
+        success: true,
+        message: "L'actualité a été supprimé avec succès.",
+      });
+    } catch (err) {
+      return res.status(500).send({
+        success: false,
+        message: "L'actualité n'a pas pu être supprimé.",
+      });
+    }
+  } else {
     return res
       .status(404)
-      .send({ success: true, message: "Actualité introuvable.", news });
-
-  try {
-    await News.destroy({
-      where: {
-        new_id: req.params.id,
-      },
-    });
-    return res.status(200).send({
-      success: true,
-      message: "L'actualité a été supprimé avec succès.",
-    });
-  } catch (err) {
-    return res.status(500).send({
-      success: false,
-      message: "L'actualité n'a pas pu être supprimé.",
-    });
+      .send({ success: true, message: "Actualité introuvable." });
   }
 };
 

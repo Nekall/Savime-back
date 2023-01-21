@@ -11,6 +11,7 @@ const Documents = db.define("documents", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: false,
     validate: {
       notNull: { message: "Document must have a name" },
       notEmpty: { message: "Document name must not be empty" },
