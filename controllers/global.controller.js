@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import fs from "fs";
 const { JWT_SECRET } = process.env;
 
 // Helpers
@@ -34,6 +35,46 @@ export const contact = async (req, res) => {
 export const newsletters = async (req, res) => {
   const { email } = req.body;
 
+  fs.open("data/newsletters_list.txt", "a", (err, fd) => {
+    if (err) {
+      if (err.code === "ENOENT") {
+        fs.writeFile("data/newsletters_list.txt", email + "\n", (err) => {
+          if (err) {
+            return res.status(500).send({
+              success: false,
+              message:
+                "Votre inscription à la newsletter n'a pas pu être prise en compte.",
+            });
+          }
+        });
+        return;
+      }
+      return res.status(500).send({
+        success: false,
+        message:
+          "Votre inscription à la newsletter n'a pas pu être prise en compte.",
+      });
+    }
+    fs.write(fd, email + "\n", (err) => {
+      if (err) {
+        return res.status(500).send({
+          success: false,
+          message:
+            "Votre inscription à la newsletter n'a pas pu être prise en compte.",
+        });
+      }
+      fs.close(fd, (err) => {
+        if (err) {
+          return res.status(500).send({
+            success: false,
+            message:
+              "Votre inscription à la newsletter n'a pas pu être prise en compte.",
+          });
+        }
+      });
+    });
+  });
+
   await sendMail(
     email,
     "Savime | Inscription Newsletters",
@@ -61,8 +102,8 @@ export const newsletters = async (req, res) => {
 
 export const jwtTokenVerification = async (req, res) => {
   const { token } = req.body;
-  jwt.verify(token, JWT_SECRET, function(err, decoded) {
-    if(err){
+  jwt.verify(token, JWT_SECRET, function (err, decoded) {
+    if (err) {
       return res.status(500).send({
         success: false,
         message: "Token invalide.",
@@ -74,4 +115,4 @@ export const jwtTokenVerification = async (req, res) => {
       });
     }
   });
-}
+};
