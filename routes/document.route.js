@@ -9,11 +9,16 @@ import {
 } from "../controllers/document.controller.js";
 const router = express.Router();
 
+// isManager & isAdmin
 router.post("/", create);
+
+// isEmployee & isManager
 router.get("/:id", findOne);
-router.patch("/:id", update);
 router.get("/", findAll);
-router.delete("/:id", deleteDoc);
+router.patch("/:id", update);
 router.get("/employee/:id", findAllByEmployee)
+
+// isAdmin
+router.delete("/:id", deleteDoc);
 
 export default router;

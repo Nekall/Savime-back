@@ -8,11 +8,16 @@ import { findAll,
 } from "../controllers/companyInformation.controller.js";
 const router = express.Router();
 
+// isManager & isAdmin
 router.post("/", create);
-router.get("/", findAll);
+router.delete("/:id", deleteCompanyInformation);
 router.patch("/:id", update);
 router.put("/", updateAll);
+
+// isEmployee
 router.get("/:id", findOne);
-router.delete("/:id", deleteCompanyInformation);
+router.get("/", findAll);
+
+
 
 export default router;

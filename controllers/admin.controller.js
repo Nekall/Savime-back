@@ -21,7 +21,7 @@ export const login = async (req, res) => {
 
           const payload = {
             admin_id: admin.admin_id,
-            role: "admin",
+            role: "Admin",
           };
 
           const token = jwt.sign(payload, JWT_SECRET, {

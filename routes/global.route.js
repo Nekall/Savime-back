@@ -6,6 +6,7 @@ import {
 } from "../controllers/global.controller.js";
 const router = express.Router();
 
+// Public
 router.post("/contact", contact);
 router.post("/newsletters", newsletters);
 router.post("/verification", jwtTokenVerification);

@@ -8,10 +8,13 @@ import {
 } from "../controllers/new.controller.js";
 const router = express.Router();
 
-router.post("/", create);
-router.get("/:id", findOne);
-router.patch("/:id", update);
+// isEmployee
 router.get("/", findAll);
+router.get("/:id", findOne);
+
+// isManager & isAdmin
+router.post("/", create);
+router.patch("/:id", update);
 router.delete("/:id", deleteNews);
 
 export default router;
