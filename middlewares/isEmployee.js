@@ -14,7 +14,7 @@ const isEmployee = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    if (decoded.role !== "Employee" || decoded.role !== "Admin")
+    if (decoded.role !== "Employee" && decoded.role !== "Admin")
       return res.status(401).send({
         success: false,
         message: "Unauthorized",

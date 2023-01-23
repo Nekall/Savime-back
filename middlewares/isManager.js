@@ -14,7 +14,7 @@ const isManager = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    if (decoded.role !== "Manager" || decoded.role !== "Admin")
+    if (decoded.role !== "Manager" && decoded.role !== "Admin")
       return res.status(401).send({
         success: false,
         message: "Unauthorized",

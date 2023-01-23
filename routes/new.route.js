@@ -1,4 +1,7 @@
 import express from "express";
+const router = express.Router();
+
+// Controllers
 import {
   create,
   findOne,
@@ -6,15 +9,18 @@ import {
   findAll,
   deleteNews,
 } from "../controllers/new.controller.js";
-const router = express.Router();
+
+// Middlewares
+import isManager from "../middlewares/isManager.js";
+import isEmployee from "../middlewares/isEmployee.js";
 
 // isEmployee
-router.get("/", findAll);
-router.get("/:id", findOne);
+router.get("/", isEmployee, findAll);
+router.get("/:id", isEmployee, findOne);
 
 // isManager & isAdmin
-router.post("/", create);
-router.patch("/:id", update);
-router.delete("/:id", deleteNews);
+router.post("/", isManager, create);
+router.patch("/:id", isManager, update);
+router.delete("/:id", isManager, deleteNews);
 
 export default router;

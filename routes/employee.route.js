@@ -1,4 +1,7 @@
 import express from "express";
+const router = express.Router();
+
+// Controllers
 import {
   create,
   findOne,
@@ -10,7 +13,10 @@ import {
   resetPassword,
   verified,
 } from "../controllers/employee.controller.js";
-const router = express.Router();
+
+// Middlewares
+import isEmployee from "../middlewares/isEmployee.js";
+import isAdmin from "../middlewares/isAdmin.js";
 
 // Public
 router.post("/", create);
@@ -19,15 +25,15 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 
 // isEmployee
-router.patch("/verified/:id", verified);
+router.patch("/verified/:id", isEmployee, verified);
 
 // isEmployee or isAdmin
-router.get("/", findAll);
-router.get("/:id", findOne);
+router.get("/", isEmployee, findAll);
+router.get("/:id", isEmployee, findOne);
 
 // isAdmin
-router.patch("/:id", update);
-router.delete("/:id", deleteEmployee);
+router.patch("/:id", isAdmin, update);
+router.delete("/:id", isAdmin, deleteEmployee);
 
 
 export default router;

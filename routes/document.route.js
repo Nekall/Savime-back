@@ -9,16 +9,21 @@ import {
 } from "../controllers/document.controller.js";
 const router = express.Router();
 
+// Middlewares
+import isEmployee from "../middlewares/isEmployee.js";
+import isManager from "../middlewares/isManager.js";
+import isAdmin from "../middlewares/isAdmin.js";
+
 // isManager & isAdmin
-router.post("/", create);
+router.post("/", isManager, create);
 
 // isEmployee & isManager
-router.get("/:id", findOne);
-router.get("/", findAll);
-router.patch("/:id", update);
-router.get("/employee/:id", findAllByEmployee)
+router.get("/:id", isEmployee || isManager, findOne);
+router.get("/", isEmployee || isManager, findAll);
+router.patch("/:id", isEmployee || isManager, update);
+router.get("/employee/:id", isEmployee || isManager, findAllByEmployee)
 
 // isAdmin
-router.delete("/:id", deleteDoc);
+router.delete("/:id", isAdmin, deleteDoc);
 
 export default router;
