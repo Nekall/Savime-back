@@ -2,10 +2,14 @@ import Documents from "../models/document.model.js";
 import Employees from "../models/employee.model.js";
 
 export const create = async (req, res) => {
-  const { name, document, employeeId } = req.body;
+  const { name, document, type, employeeId } = req.body;
+
+  // check if employee_id exists
+
   const newDocument = await Documents.create({
     name,
     document,
+    type,
     employee_id: employeeId,
   });
   return res.status(201).send({

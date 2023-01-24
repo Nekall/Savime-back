@@ -16,14 +16,12 @@ import isAuth from "../middlewares/isAuth.js";
 
 // isManager & isAdmin
 router.post("/", isManager, create);
+router.delete("/:id", isManager, deleteDoc);
 
 // isEmployee & isManager & isAdmin
 router.get("/:id", isAuth, findOne);
 router.get("/", isAuth, findAll);
 router.patch("/:id", isAuth, update);
 router.get("/employee/:id", isAuth, findAllByEmployee)
-
-// isAdmin
-router.delete("/:id", isAdmin, deleteDoc);
 
 export default router;
