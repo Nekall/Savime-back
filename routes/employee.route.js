@@ -25,6 +25,7 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 
 // isEmployee
+router.patch("/:id", isEmployee, update);
 router.patch("/verified/:id", isEmployee, verified);
 
 // isEmployee or isAdmin
@@ -32,7 +33,6 @@ router.get("/", isEmployee, findAll);
 router.get("/:id", isEmployee, findOne);
 
 // isAdmin
-router.patch("/:id", isAdmin, update);
 router.delete("/:id", isAdmin, deleteEmployee);
 
 

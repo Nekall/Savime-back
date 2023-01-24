@@ -6,7 +6,7 @@ const { JWT_SECRET } = process.env;
 import { sendMail } from "../helpers/sendMail.js";
 
 export const contact = async (req, res) => {
-  const { firstname, lastname, email, text } = req.body;
+  const { firstname, lastname, email, message } = req.body;
 
   await sendMail(
     "contact@savime.tech",
@@ -15,7 +15,7 @@ export const contact = async (req, res) => {
         ${firstname} ${lastname} <br/>
         (${email})<br />
         MESSAGE: <br />
-        ${text}<br />
+        ${message}<br />
         `
   )
     .then(() => {
