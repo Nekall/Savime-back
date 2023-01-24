@@ -16,7 +16,9 @@ import {
 
 // Middlewares
 import isEmployee from "../middlewares/isEmployee.js";
+import isManager from "../middlewares/isManager.js";
 import isAdmin from "../middlewares/isAdmin.js";
+import isAuth from "../middlewares/isAuth.js";
 
 // Public
 router.post("/", create);
@@ -28,9 +30,9 @@ router.post("/reset-password/:token", resetPassword);
 router.patch("/:id", isEmployee, update);
 router.patch("/verified/:id", isEmployee, verified);
 
-// isEmployee or isAdmin
-router.get("/", isEmployee, findAll);
-router.get("/:id", isEmployee, findOne);
+// isEmployee or isManager or isAdmin
+router.get("/", isAuth, findAll);
+router.get("/:id", isAuth, findOne);
 
 // isAdmin
 router.delete("/:id", isAdmin, deleteEmployee);

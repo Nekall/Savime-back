@@ -1,10 +1,12 @@
 import express from "express";
+const router = express.Router();
+
+// Controllers
 import {
   contact,
   newsletters,
   jwtTokenVerification,
 } from "../controllers/global.controller.js";
-const router = express.Router();
 
 // Public
 router.post("/contact", contact);

@@ -12,11 +12,11 @@ import {
 
 // Middlewares
 import isManager from "../middlewares/isManager.js";
-import isEmployee from "../middlewares/isEmployee.js";
+import isAuth from "../middlewares/isAuth.js";
 
 // isEmployee
-router.get("/", isEmployee, findAll);
-router.get("/:id", isEmployee, findOne);
+router.get("/", isAuth, findAll);
+router.get("/:id", isAuth, findOne);
 
 // isManager & isAdmin
 router.post("/", isManager, create);

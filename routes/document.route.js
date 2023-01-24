@@ -10,18 +10,18 @@ import {
 const router = express.Router();
 
 // Middlewares
-import isEmployee from "../middlewares/isEmployee.js";
 import isManager from "../middlewares/isManager.js";
 import isAdmin from "../middlewares/isAdmin.js";
+import isAuth from "../middlewares/isAuth.js";
 
 // isManager & isAdmin
 router.post("/", isManager, create);
 
-// isEmployee & isManager
-router.get("/:id", isEmployee || isManager, findOne);
-router.get("/", isEmployee || isManager, findAll);
-router.patch("/:id", isEmployee || isManager, update);
-router.get("/employee/:id", isEmployee || isManager, findAllByEmployee)
+// isEmployee & isManager & isAdmin
+router.get("/:id", isAuth, findOne);
+router.get("/", isAuth, findAll);
+router.patch("/:id", isAuth, update);
+router.get("/employee/:id", isAuth, findAllByEmployee)
 
 // isAdmin
 router.delete("/:id", isAdmin, deleteDoc);
