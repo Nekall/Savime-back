@@ -28,11 +28,11 @@ router.post("/reset-password/:token", resetPassword);
 
 // isEmployee
 router.patch("/:id", isEmployee, update);
-router.patch("/verified/:id", isEmployee, verified);
 
 // isEmployee or isManager or isAdmin
 router.get("/", isAuth, findAll);
 router.get("/:id", isAuth, findOne);
+router.patch("/verified/:id", isAuth, verified);
 
 // isAdmin
 router.delete("/:id", isAdmin, deleteEmployee);

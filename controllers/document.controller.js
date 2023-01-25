@@ -4,18 +4,34 @@ import Employees from "../models/employee.model.js";
 export const create = async (req, res) => {
   const { name, document, type, employeeId } = req.body;
 
-  // check if employee_id exists
+  const employee = await Employees.findOne({
+    where: { employee_id: employeeId },
+  });
 
-  const newDocument = await Documents.create({
-    name,
-    document,
-    type,
-    employee_id: employeeId,
-  });
-  return res.status(201).send({
-    success: true,
-    message: "Document créé avec succès.",
-  });
+  if (employee === null)
+    return res.status(404).send({
+      success: false,
+      message: "L'employé n'existe pas.",
+    });
+
+  try {
+    await Documents.create({
+      name,
+      document,
+      type,
+      employee_id: employeeId,
+    });
+    return res.status(201).send({
+      success: true,
+      message: "Document créé avec succès.",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: "Le document n'a pas pu être créé.",
+      error: error,
+    });
+  }
 };
 
 export const update = async (req, res) => {
