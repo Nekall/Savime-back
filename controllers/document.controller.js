@@ -4,6 +4,17 @@ import Employees from "../models/employee.model.js";
 export const create = async (req, res) => {
   const { name, document, type, employeeId } = req.body;
 
+  if (type === "attestation" || type === "contract") {
+    const checkIfExisted = await Documents.findOne({
+      where: { employee_id: employeeId, type },
+    });
+    if (checkIfExisted)
+      return res.status(400).send({
+        success: false,
+        message: "Un document de ce type existe déjà pour cet employé·e.",
+      });
+  }
+
   const employee = await Employees.findOne({
     where: { employee_id: employeeId },
   });
@@ -11,7 +22,7 @@ export const create = async (req, res) => {
   if (employee === null)
     return res.status(404).send({
       success: false,
-      message: "L'employé n'existe pas.",
+      message: "L'employé·e n'existe pas.",
     });
 
   try {
@@ -35,6 +46,22 @@ export const create = async (req, res) => {
 };
 
 export const update = async (req, res) => {
+  if (type === "payslip" || type === "contract") {
+    const checkIfExisted = await Documents.findOne({
+      where: {
+        employee_id: req.body.employee_id
+          ? req.body.employee_id
+          : document.employee_id,
+        type: req.body.type ? req.body.type : document.type,
+      },
+    });
+    if (checkIfExisted)
+      return res.status(400).send({
+        success: false,
+        message: "Un document de ce type existe déjà pour cet employé·e.",
+      });
+  }
+
   const document = await Documents.findOne({
     where: { document_id: req.params.id },
   });
