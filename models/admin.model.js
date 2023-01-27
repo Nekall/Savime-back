@@ -3,7 +3,7 @@ import db from "../server.js";
 
 const Admin = db.define("admins", {
   admin_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
@@ -19,9 +19,6 @@ const Admin = db.define("admins", {
   },
   password: { type: DataTypes.STRING, allowNull: false },
   resetToken: { type: DataTypes.STRING, allowNull: true },
-  profilePicture: {
-    type: DataTypes.TEXT,
-  },
 });
 
 console.log("🔨 Creating the admin table");

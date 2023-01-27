@@ -46,20 +46,23 @@ export const create = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  if (type === "payslip" || type === "contract") {
-    const checkIfExisted = await Documents.findOne({
-      where: {
-        employee_id: req.body.employee_id
-          ? req.body.employee_id
-          : document.employee_id,
-        type: req.body.type ? req.body.type : document.type,
-      },
-    });
-    if (checkIfExisted)
-      return res.status(400).send({
-        success: false,
-        message: "Un document de ce type existe déjà pour cet employé·e.",
+
+  if(req.body.type !== "undefined"){
+    if (req.body.type === "payslip" || req.body.type === "contract") {
+      const checkIfExisted = await Documents.findOne({
+        where: {
+          employee_id: req.body.employee_id
+            ? req.body.employee_id
+            : document.employee_id,
+          type: req.body.type ? req.body.type : document.type,
+        },
       });
+      if (checkIfExisted)
+        return res.status(400).send({
+          success: false,
+          message: "Un document de ce type existe déjà pour cet employé·e.",
+        });
+    }
   }
 
   const document = await Documents.findOne({

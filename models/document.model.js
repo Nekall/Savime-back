@@ -3,7 +3,7 @@ import db from "../server.js";
 
 const Documents = db.define("documents", {
   document_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
@@ -34,7 +34,7 @@ const Documents = db.define("documents", {
     },
   },
   employee_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     allowNull: false,
   },
 });
