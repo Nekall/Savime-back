@@ -72,7 +72,7 @@ export const update = async (req, res) => {
     return res
       .status(404)
       .send({ success: true, message: "Document introuvable.", document });
-
+      
   const updatedData = {
     name: req.body.name ? req.body.name : document.name,
     document: req.body.document ? req.body.document : document.document,
