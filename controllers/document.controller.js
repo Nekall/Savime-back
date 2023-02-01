@@ -1,41 +1,60 @@
 import Documents from "../models/document.model.js";
 import Employees from "../models/employee.model.js";
 
+// helpers
+import { scanBase64 } from "../helpers/scanBase64.js";
+
 export const create = async (req, res) => {
   const { name, document, type, employeeId } = req.body;
 
-  if (type === "attestation" || type === "contract") {
-    const checkIfExisted = await Documents.findOne({
-      where: { employee_id: employeeId, type },
-    });
-    if (checkIfExisted)
-      return res.status(400).send({
-        success: false,
-        message: "Un document de ce type existe déjà pour cet employé·e.",
-      });
-  }
-
-  const employee = await Employees.findOne({
-    where: { employee_id: employeeId },
-  });
-
-  if (employee === null)
-    return res.status(404).send({
+  const scanResult = await scanBase64(document);
+  if (!scanResult)
+    return res.status(400).send({
       success: false,
-      message: "L'employé·e n'existe pas.",
+      message: "Le document n'a pas pu être créé.",
+      error: "Virus détecté",
     });
 
   try {
-    await Documents.create({
-      name,
-      document,
-      type,
-      employee_id: employeeId,
+    if (type === "attestation" || type === "contract") {
+      const checkIfExisted = await Documents.findOne({
+        where: { employee_id: employeeId, type },
+      });
+      if (checkIfExisted)
+        return res.status(400).send({
+          success: false,
+          message: "Un document de ce type existe déjà pour cet employé·e.",
+        });
+    }
+
+    const employee = await Employees.findOne({
+      where: { employee_id: employeeId },
     });
-    return res.status(201).send({
-      success: true,
-      message: "Document créé avec succès.",
-    });
+
+    if (employee === null)
+      return res.status(404).send({
+        success: false,
+        message: "L'employé·e n'existe pas.",
+      });
+
+    try {
+      await Documents.create({
+        name,
+        document,
+        type,
+        employee_id: employeeId,
+      });
+      return res.status(201).send({
+        success: true,
+        message: "Document créé avec succès.",
+      });
+    } catch (error) {
+      return res.status(500).send({
+        success: false,
+        message: "Le document n'a pas pu être créé.",
+        error: error,
+      });
+    }
   } catch (error) {
     return res.status(500).send({
       success: false,
@@ -46,8 +65,7 @@ export const create = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-
-  if(req.body.type !== "undefined"){
+  if (req.body.type !== "undefined") {
     if (req.body.type === "payslip" || req.body.type === "contract") {
       const checkIfExisted = await Documents.findOne({
         where: {
@@ -72,7 +90,7 @@ export const update = async (req, res) => {
     return res
       .status(404)
       .send({ success: true, message: "Document introuvable.", document });
-      
+
   const updatedData = {
     name: req.body.name ? req.body.name : document.name,
     document: req.body.document ? req.body.document : document.document,
