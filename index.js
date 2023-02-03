@@ -41,7 +41,6 @@ app.use((req, res, next) => {
 });
 
 //############### Routes #############
-//app.get('/', (req, res) => res.send('<h1>Welcome on Savime ! 🚀</h1>'));
 app.use("/", globalRoutes);
 app.use("/employees", employeeRoutes);
 app.use("/managers", managerRoutes);
