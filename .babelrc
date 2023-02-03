@@ -1,10 +1,18 @@
 {
     "presets": [
-        "@babel/preset-env"
+        [
+            "@babel/preset-env",
+            {
+                "modules": "commonjs",
+                "targets": {
+                    "node": "current"
+                }
+            }
+        ]
     ],
     "ignore": [
         "node_modules"
-      ],
+    ],
     "sourceType": "unambiguous",
     "inputSourceMap": false,
     "sourceMaps": false,
