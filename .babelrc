@@ -1,0 +1,14 @@
+{
+    "presets": [
+        "@babel/preset-env"
+    ],
+    "ignore": [
+        "node_modules"
+      ],
+    "sourceType": "unambiguous",
+    "inputSourceMap": false,
+    "sourceMaps": false,
+    "only": [
+        "*.js"
+    ]
+}
