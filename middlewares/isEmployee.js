@@ -7,7 +7,7 @@ const isEmployee = (req, res, next) => {
   if (!req.headers.authorization)
     return res.status(400).send({
       success: false,
-      message: "Authorization header is missing",
+      message: "L'en-tête d'autorisation est manquante.",
     });
 
   const token = req.headers.authorization.split(" ")[1];
@@ -17,7 +17,7 @@ const isEmployee = (req, res, next) => {
     if (decoded.role !== "Employee" && decoded.role !== "Admin")
       return res.status(401).send({
         success: false,
-        message: "Unauthorized",
+        message: "Non autorisé.",
       });
 
     next();
@@ -25,18 +25,18 @@ const isEmployee = (req, res, next) => {
     if (err.name === "JsonWebTokenError")
       return res.status(401).send({
         success: false,
-        message: "Invalid token",
+        message: "Jeton invalide.",
       });
 
     if (err.name === "TokenExpiredError")
       return res.status(401).send({
         success: false,
-        message: "Token expired",
+        message: "Jeton expiré.",
       });
 
     return res.status(500).send({
       success: false,
-      message: "An unexpected error occurred",
+      message: "Une erreur inattendue s'est produite.",
     });
   }
 };
