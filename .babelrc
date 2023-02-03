@@ -15,8 +15,5 @@
     ],
     "sourceType": "unambiguous",
     "inputSourceMap": false,
-    "sourceMaps": false,
-    "only": [
-        "*.js"
-    ]
+    "sourceMaps": false
 }
