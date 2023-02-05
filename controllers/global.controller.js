@@ -9,7 +9,7 @@ export const contact = async (req, res) => {
   const { firstname, lastname, email, message } = req.body;
 
   await sendMail(
-    "contact@savime.tech",
+    "contact@neka.dev",
     "Savime | Prise de Contact",
     `Demande d'informations ou suggestions d'améliorations de la part de <br />
         ${firstname} ${lastname} <br/>
@@ -82,6 +82,8 @@ export const newsletters = async (req, res) => {
         Nous vous enverrons pas plus d'un mail par moi pour vous informer de l'avancer du projet !<br/>
         Merci pour votre intérêt et votre confiance;<br/>
         L'équipe de Savime.<br/>
+        <hr />
+        Nota Bene: Ceci est un projet étudiant, vous n'êtes pas vraiment inscrit·e à une newsletter.<br/>
         `
   )
     .then(() => {
