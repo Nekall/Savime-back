@@ -23,7 +23,7 @@ export const create = async (req, res) => {
       if (checkIfExisted)
         return res.status(400).send({
           success: false,
-          message: "Un document de ce type existe déjà pour cet employé·e.",
+          message: "Un document de ce type existe déjà pour cet·te employé·e.",
         });
     }
 
@@ -65,8 +65,16 @@ export const create = async (req, res) => {
 };
 
 export const update = async (req, res) => {
+  const scanResult = await scanBase64(req.body.document);
+  if (!scanResult)
+    return res.status(400).send({
+      success: false,
+      message: "Le document n'a pas pu être mis à jour.",
+      error: "Virus détecté",
+    });
+
   if (req.body.type !== "undefined") {
-    if (req.body.type === "payslip" || req.body.type === "contract") {
+    if (req.body.type === "attestation" || req.body.type === "contract") {
       const checkIfExisted = await Documents.findOne({
         where: {
           employee_id: req.body.employee_id
@@ -78,7 +86,7 @@ export const update = async (req, res) => {
       if (checkIfExisted)
         return res.status(400).send({
           success: false,
-          message: "Un document de ce type existe déjà pour cet employé·e.",
+          message: "Un document de ce type existe déjà pour cet·te employé·e.",
         });
     }
   }

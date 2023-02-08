@@ -9,7 +9,7 @@ export const login = async (req, res) => {
       if (!admin)
         return res
           .status(404)
-          .json({ succes: false, message: "Cet admin n'existe pas." });
+          .json({ succes: false, message: "Cet·te admin n'existe pas." });
 
       bcrypt
         .compare(req.body.password, admin.password)
