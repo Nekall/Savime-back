@@ -32,6 +32,32 @@ export const contact = async (req, res) => {
     });
 };
 
+export const internalContact = async (req, res) => {
+  const { firstname, lastname, email, message, emailManager } = req.body;
+  await sendMail(
+    emailManager,
+    "Savime | Contact Interne",
+    `Message <br />
+        ${firstname} ${lastname} <br/>
+        (${email})<br />
+        MESSAGE: <br />
+        ${message}<br />
+        `
+  )
+    .then(() => {
+      return res.status(200).send({
+        success: true,
+        message: "Votre message a bien été envoyé.",
+      });
+    })
+    .catch((err) => {
+      return res.status(500).send({
+        success: false,
+        message: "Votre message n'a pas pu être envoyé.",
+      });
+    });
+};
+
 export const newsletters = async (req, res) => {
   const { email } = req.body;
 
